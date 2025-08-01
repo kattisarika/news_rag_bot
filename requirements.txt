@@ -1,0 +1,7 @@
+langchain
+langchain-community
+openai
+chromadb
+beautifulsoup4
+requests
+python-dotenv
