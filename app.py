@@ -11,12 +11,15 @@ from langchain_community.vectorstores import FAISS
 from langchain_openai import OpenAIEmbeddings
 
 from dotenv import load_dotenv
+import os
+
 load_dotenv()
 
-
-# Optional: Load API key from environment variable
-import os
 openai_api_key = os.getenv("OPENAI_API_KEY")
+print("Loaded OpenAI key:", bool(openai_api_key))  # TEMP: for debugging
+
+from langchain_openai import OpenAIEmbeddings
+embeddings = OpenAIEmbeddings(openai_api_key=openai_api_key)
 
 
 def scrape_news():
