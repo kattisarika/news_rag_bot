@@ -6,6 +6,8 @@ from langchain_community.vectorstores import Chroma
 from langchain_community.embeddings import OpenAIEmbeddings
 from langchain.chains import RetrievalQA
 from langchain.chat_models import ChatOpenAI
+from chromadb.config import Settings
+
 
 # Optional: Load API key from environment variable
 os.environ["OPENAI_API_KEY"] ="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" 
@@ -33,7 +35,17 @@ texts = text_splitter.split_text(news_text)
 
 # Embeddings and vector store
 embeddings = OpenAIEmbeddings()
-vectordb = Chroma.from_texts(texts, embeddings)
+
+vectordb = Chroma.from_texts(
+    texts,
+    embeddings,
+    collection_name="news",
+    client_settings=Settings(
+        chroma_db_impl="duckdb+memory",
+        persist_directory=None
+    )
+)
+
 
 # Define LLM
 llm = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0)
