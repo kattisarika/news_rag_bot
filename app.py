@@ -36,15 +36,19 @@ texts = text_splitter.split_text(news_text)
 # Embeddings and vector store
 embeddings = OpenAIEmbeddings()
 
+
+settings = Settings(
+    chroma_db_impl="duckdb+memory",  # Use in-memory mode
+    persist_directory=""             # Empty string, not None!
+)
+
 vectordb = Chroma.from_texts(
     texts,
     embeddings,
     collection_name="news",
-    client_settings=Settings(
-        chroma_db_impl="duckdb+memory",
-        persist_directory=None
-    )
+    client_settings=settings
 )
+
 
 
 # Define LLM
