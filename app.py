@@ -10,11 +10,14 @@ from chromadb.config import Settings
 from langchain_community.vectorstores import FAISS
 from langchain_openai import OpenAIEmbeddings
 
-
+from dotenv import load_dotenv
+load_dotenv()
 
 
 # Optional: Load API key from environment variable
-os.environ["OPENAI_API_KEY"] ="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" 
+import os
+openai_api_key = os.getenv("OPENAI_API_KEY")
+
 
 def scrape_news():
     url = "https://timesofindia.indiatimes.com"
