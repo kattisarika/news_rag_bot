@@ -19,8 +19,7 @@ openai_api_key = os.getenv("OPENAI_API_KEY")
 print("Loaded OpenAI key:", bool(openai_api_key))  # TEMP: for debugging
 
 from langchain_openai import OpenAIEmbeddings
-embeddings = OpenAIEmbeddings(openai_api_key=openai_api_key)
-
+embeddings = OpenAIEmbeddings(openai_api_key=st.secrets["OPENAI_API_KEY"])
 
 def scrape_news():
     url = "https://timesofindia.indiatimes.com"
