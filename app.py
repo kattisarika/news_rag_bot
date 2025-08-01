@@ -7,6 +7,10 @@ from langchain_community.embeddings import OpenAIEmbeddings
 from langchain.chains import RetrievalQA
 from langchain.chat_models import ChatOpenAI
 from chromadb.config import Settings
+from langchain_community.vectorstores import FAISS
+from langchain_openai import OpenAIEmbeddings
+
+
 
 
 # Optional: Load API key from environment variable
@@ -33,22 +37,10 @@ news_text = scrape_news()
 text_splitter = CharacterTextSplitter(chunk_size=500, chunk_overlap=50)
 texts = text_splitter.split_text(news_text)
 
-# Embeddings and vector store
+
+# After loading your texts:
 embeddings = OpenAIEmbeddings()
-
-
-settings = Settings(
-    chroma_db_impl="duckdb+memory",  # Use in-memory mode
-    persist_directory=""             # Empty string, not None!
-)
-
-vectordb = Chroma.from_texts(
-    texts,
-    embeddings,
-    collection_name="news",
-    client_settings=settings
-)
-
+vectordb = FAISS.from_texts(texts, embedding=embeddings)
 
 
 # Define LLM
