@@ -9,6 +9,8 @@ from langchain.chat_models import ChatOpenAI
 from chromadb.config import Settings
 from langchain_community.vectorstores import FAISS
 from langchain_openai import OpenAIEmbeddings
+import streamlit as st
+from langchain_openai import OpenAIEmbeddings
 
 from dotenv import load_dotenv
 import os
