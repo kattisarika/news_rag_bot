@@ -12,7 +12,7 @@ if news_source == "Times of India":
 elif news_source == "BBC":
     articles = get_news_articles(source="BBC")
 else:
-    articles = get_news_articles(source="ESPN")
+    articles = get_news_articles(source="espn")
 
 # Display articles
 for i, article in enumerate(articles[:10]):
