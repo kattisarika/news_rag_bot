@@ -33,7 +33,7 @@ def get_news_articles(source="TOI"):
     elif source == "BBC":
         return fetch_from_bbc()
     elif source == "NY TIMES":
-        return fetch_from_reuters_business()    
+        return fetch_weather_rss()    
     else:
         return []
 
@@ -76,19 +76,28 @@ def fetch_from_bbc():
     items = soup.findAll("item")
     return [item.title.text + ". " + item.description.text for item in items]
 
-def fetch_from_reuters_business():
-    url = "http://feeds.reuters.com/reuters/businessNews"
+def fetch_weather_rss():
+    import requests
+    from bs4 import BeautifulSoup
+
+    url = "https://w1.weather.gov/xml/current_obs/KNYC.rss"  # NYC weather
     headers = {"User-Agent": "Mozilla/5.0"}
-    resp = requests.get(url, headers=headers)
-    if resp.status_code != 200:
-        return [f"Failed to fetch Reuters feed: {resp.status_code}"]
-    soup = BeautifulSoup(resp.content, "xml")
+    response = requests.get(url, headers=headers)
+    
+    if response.status_code != 200:
+        return [f"Failed to fetch weather: {response.status_code}"]
+
+    soup = BeautifulSoup(response.content, "xml")
     items = soup.find_all("item")
-    return [
-        (item.title.text if item.title else "No title") + 
-        ". " + (item.description.text if item.description else "")
-        for item in items
-    ]
+    
+    news = []
+    for item in items:
+        title = item.title.text if item.title else "No title"
+        description = item.description.text if item.description else ""
+        news.append(f"{title}. {description}")
+    
+    return news
+
 
 
 
