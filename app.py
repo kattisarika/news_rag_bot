@@ -37,21 +37,7 @@ def get_news_articles(source="TOI"):
     else:
         return []
 
-def scrape_news():
-    url = "https://timesofindia.indiatimes.com"
-    r = requests.get(url)
-    soup = BeautifulSoup(r.text, "html.parser")
-    articles = soup.find_all("a", href=True)
-    news = []
-    for a in articles:
-        text = a.get_text(strip=True)
-        href = a['href']
-        if text and '/articleshow/' in href:
-            full_link = url + href if not href.startswith("http") else href
-            news.append(f"{text} ({full_link})")
-        if len(news) >= 10:
-            break
-    return "\n".join(news)
+
 
 
 
