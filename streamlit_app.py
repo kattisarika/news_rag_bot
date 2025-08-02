@@ -15,24 +15,10 @@ else:
     articles = get_news_articles(source="ESPN")
 
 # Display articles
-for i, article in enumerate(articles[:5]):
+for i, article in enumerate(articles[:10]):
     st.markdown(f"**{i+1}.** {article}")
 
-def load_news():
-    with open("news_data.txt", "r") as f:
-        news = f.read().split("\n\n")
-    return news[:10]  # top 10 stories
 
-# Load news
-st.title("🗞️ News Q&A Bot")
-st.subheader("Latest Headlines:")
-for item in load_news():
-    st.markdown(f"👉 {item}")
-
-# User Q&A section
-st.markdown("---")
-st.subheader("Ask a question about the news:")
-question = st.text_input("Enter your question")
 
 if question:
     # Run your existing QA chain (import it from app.py)
