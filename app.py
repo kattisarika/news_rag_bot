@@ -23,6 +23,14 @@ print("Loaded OpenAI key:", bool(openai_api_key))  # TEMP: for debugging
 from langchain_openai import OpenAIEmbeddings
 embeddings = OpenAIEmbeddings(openai_api_key=st.secrets["OPENAI_API_KEY"])
 
+def get_news_articles(source="TOI"):
+    if source == "TOI":
+        return fetch_from_toi()
+    elif source == "BBC":
+        return fetch_from_bbc()
+    else:
+        return []
+
 def scrape_news():
     url = "https://timesofindia.indiatimes.com"
     r = requests.get(url)
@@ -38,6 +46,31 @@ def scrape_news():
         if len(news) >= 10:
             break
     return "\n".join(news)
+
+
+
+def fetch_from_toi():
+    import requests
+    from bs4 import BeautifulSoup
+
+    url = "https://timesofindia.indiatimes.com/rssfeedstopstories.cms"
+    response = requests.get(url)
+    soup = BeautifulSoup(response.content, features="xml")
+    items = soup.findAll("item")
+    return [item.title.text + ". " + item.description.text for item in items]
+
+   
+def fetch_from_bbc():
+    import requests
+    from bs4 import BeautifulSoup
+
+    url = "http://feeds.bbci.co.uk/news/rss.xml"
+    response = requests.get(url)
+    soup = BeautifulSoup(response.content, features="xml")
+    items = soup.findAll("item")
+    return [item.title.text + ". " + item.description.text for item in items]
+
+
 
 # Scrape and process
 news_text = scrape_news()
