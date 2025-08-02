@@ -19,10 +19,3 @@ for i, article in enumerate(articles[:10]):
     st.markdown(f"**{i+1}.** {article}")
 
 
-
-if question:
-    # Run your existing QA chain (import it from app.py)
-    from app import qa_chain
-    response = qa_chain.run(question)
-    st.markdown("### 🤖 Answer:")
-    st.write(response)
