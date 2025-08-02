@@ -9,10 +9,11 @@ news_source = st.radio("Choose your news source:", ("Times of India", "BBC","NY 
 # Get news based on source
 if news_source == "Times of India":
     articles = get_news_articles(source="TOI")
-elif news_source == "BBC":
-    articles = get_news_articles(source="BBC")
+
 elif news_source == "NY TIMES":
     articles = get_news_articles(source="NY Times")
+elif news_source == "BBC":
+    articles = get_news_articles(source="BBC")
 else: 
     articles = []
 
