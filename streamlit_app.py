@@ -11,8 +11,8 @@ if news_source == "Times of India":
     articles = get_news_articles(source="TOI")
 elif news_source == "BBC":
     articles = get_news_articles(source="BBC")
-elif news_source == "ESPN":
-    articles = get_news_articles(source="ESPN")
+elif news_source == "CNN":
+    articles = get_news_articles(source="CNN")
 else: 
     articles = []
 
