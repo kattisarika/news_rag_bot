@@ -32,8 +32,8 @@ def get_news_articles(source="TOI"):
         return fetch_from_toi()
     elif source == "BBC":
         return fetch_from_bbc()
-    elif source == "ESPN":
-        return fetch_from_espn()    
+    elif source == "NY TIMES":
+        return fetch_from_nytimes()    
     else:
         return []
 
@@ -76,11 +76,11 @@ def fetch_from_bbc():
     items = soup.findAll("item")
     return [item.title.text + ". " + item.description.text for item in items]
 
-def fetch_from_espn():
+def fetch_from_nytimes():
     import requests
     from bs4 import BeautifulSoup
 
-    url = "https://www.espn.com/espn/rss/news"
+    url = "https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml"
     response = requests.get(url)
     soup = BeautifulSoup(response.content, features="xml")
     items = soup.findAll("item")
