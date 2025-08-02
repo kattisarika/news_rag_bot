@@ -81,10 +81,25 @@ def fetch_from_nytimes():
     from bs4 import BeautifulSoup
 
     url = "https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml"
-    response = requests.get(url)
+    headers = {
+        "User-Agent": "Mozilla/5.0"
+    }
+    response = requests.get(url, headers=headers)
+    
+    if response.status_code != 200:
+        return [f"Failed to fetch NYT RSS: {response.status_code}"]
+
     soup = BeautifulSoup(response.content, features="xml")
     items = soup.findAll("item")
-    return [item.title.text + ". " + item.description.text for item in items]
+
+    news = []
+    for item in items:
+        title = item.title.text if item.title else "No title"
+        description = item.description.text if item.description else ""
+        news.append(f"{title}. {description}")
+    
+    return news
+
 
 # Scrape and process
 news_text = scrape_news()
