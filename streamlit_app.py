@@ -2,6 +2,14 @@ import streamlit as st
 from app import qa_chain
 st.title("NEWS RAG BOT")
 
+# Add a radio button for source selection
+news_source = st.radio("Choose your news source:", ("Times of India", "BBC"))
+
+# Get news based on source
+if news_source == "Times of India":
+    articles = get_news_articles(source="TOI")
+else:
+    articles = get_news_articles(source="BBC")
 
 def load_news():
     with open("news_data.txt", "r") as f:
