@@ -1,5 +1,6 @@
 import streamlit as st
 from app import qa_chain
+from app import get_news_articles
 st.title("NEWS RAG BOT")
 
 # Add a radio button for source selection
