@@ -28,6 +28,8 @@ def get_news_articles(source="TOI"):
         return fetch_from_toi()
     elif source == "BBC":
         return fetch_from_bbc()
+    elif source == "ESPN":
+        return fetch_from_espn()    
     else:
         return []
 
@@ -70,7 +72,15 @@ def fetch_from_bbc():
     items = soup.findAll("item")
     return [item.title.text + ". " + item.description.text for item in items]
 
+def fetch_from_espn():
+    import requests
+    from bs4 import BeautifulSoup
 
+    url = "https://www.espn.com/espn/rss/news"
+    response = requests.get(url)
+    soup = BeautifulSoup(response.content, features="xml")
+    items = soup.findAll("item")
+    return [item.title.text + ". " + item.description.text for item in items]
 
 # Scrape and process
 news_text = scrape_news()
