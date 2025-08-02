@@ -14,7 +14,7 @@ elif news_source == "BBC":
 elif news_source == "ESPN":
     articles = get_news_articles(source="ESPN")
 else: 
-    return []
+    articles = []
 
 # Display articles
 for i, article in enumerate(articles[:10]):
