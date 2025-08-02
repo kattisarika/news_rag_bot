@@ -1,5 +1,9 @@
 import os
 import requests
+import sys
+import pysqlite3
+sys.modules["sqlite3"] = pysqlite3
+
 from bs4 import BeautifulSoup
 from langchain.text_splitter import CharacterTextSplitter
 from langchain_community.vectorstores import Chroma
