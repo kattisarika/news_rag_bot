@@ -4,7 +4,7 @@ from app import get_news_articles
 st.title("NEWS RAG BOT")
 
 # Add a radio button for source selection
-news_source = st.radio("Choose your news source:", ("Times of India", "BBC","NY Times"))
+news_source = st.radio("Choose your news source:", ("Times of India","NY Times","BBC"))
 
 # Get news based on source
 if news_source == "Times of India":
