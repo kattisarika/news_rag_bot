@@ -86,7 +86,15 @@ def fetch_from_nytimes():
     response = requests.get(url)
     soup = BeautifulSoup(response.content, features="xml")
     items = soup.findAll("item")
-    return [item.title.text + ". " + item.description.text for item in items]
+    
+    articles = []
+    for item in items:
+        title = item.title.text
+        link = item.link.text
+        articles.append(f"[{title}]({link})")
+    
+    return articles  
+
 
 
 def fetch_sample_weather():
