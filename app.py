@@ -82,19 +82,22 @@ def fetch_weather_rss():
     import requests
     from bs4 import BeautifulSoup
 
-    url = "https://www.wfaa.com/feeds/syndication/rss/weather"
+    url = "https://w1.weather.gov/xml/current_obs/KDAL.rss"
     headers = {"User-Agent": "Mozilla/5.0"}
     resp = requests.get(url, headers=headers)
     resp.raise_for_status()
 
     soup = BeautifulSoup(resp.content, features="xml")
     items = soup.find_all("item")
+    if not items:
+        return ["No weather items found in feed"]
 
-    return [
-        (item.title.text if item.title else "No title") + 
-        ". " + (item.description.text if item.description else "")
-        for item in items
-    ]
+    news = []
+    for item in items:
+        title = item.title.text if item.title else "No title"
+        description = item.description.text if item.description else ""
+        news.append(f"{title}. {description}")
+    return news
 
 
 
