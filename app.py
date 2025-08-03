@@ -78,6 +78,17 @@ def fetch_from_bbc():
     items = soup.findAll("item")
     return [item.title.text + ". " + item.description.text for item in items]
 
+def fetch_from_nytimes():
+    import requests
+    from bs4 import BeautifulSoup
+
+    url = "https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml"
+    response = requests.get(url)
+    soup = BeautifulSoup(response.content, features="xml")
+    items = soup.findAll("item")
+    return [item.title.text + ". " + item.description.text for item in items]
+
+
 def fetch_sample_weather():
     with open("sample_weather.xml", "r") as f:
         content = f.read()
