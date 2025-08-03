@@ -18,7 +18,7 @@ articles = get_news_articles(source=source_key)
 
 if articles:
     for i, article in enumerate(articles[:10]):
-        st.markdown(f"**{i+1}.** {article}")
+        st.markdown(f"**{i+1}.** {article}", unsafe_allow_html=True)
 else:
     st.write("No articles found for the selected source.")
 
