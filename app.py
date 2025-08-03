@@ -98,7 +98,7 @@ def fetch_weather_rss():
         description = item.description.text if item.description else ""
         news.append(f"{title}. {description}")
     return news
-
+print(fetch_weather_rss())
 
 
 
