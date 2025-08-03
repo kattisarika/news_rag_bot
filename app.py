@@ -38,6 +38,8 @@ def get_news_articles(source="TOI"):
         return fetch_from_nytimes()
     elif source == "WEATHER":
         return fetch_sample_weather()
+    elif source == "GRAPHQL":
+        return fetch_from_graphql()    
     else:
         return []
 
