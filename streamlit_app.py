@@ -8,7 +8,8 @@ option_map = {
     "Times of India": "TOI",
     "NY Times": "NY TIMES",
     "BBC": "BBC",
-    "Weather": "WEATHER"
+    "Weather": "WEATHER",
+    "Countries (GraphQL)": "GRAPHQL"  
 }
 
 news_source_label = st.radio("Choose your news source:", list(option_map.keys()))
