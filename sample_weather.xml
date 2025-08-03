@@ -1,0 +1,9 @@
+<rss>
+  <channel>
+    <title>Sample Weather Feed</title>
+    <item>
+      <title>Dallas Weather</title>
+      <description>Sunny, 85°F</description>
+    </item>
+  </channel>
+</rss>
