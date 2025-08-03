@@ -65,7 +65,7 @@ def fetch_from_toi():
     response = requests.get(url)
     soup = BeautifulSoup(response.content, features="xml")
     items = soup.findAll("item")
-     articles = []
+    articles = []
     for item in items:
         title = item.title.text
         link = item.link.text
@@ -83,7 +83,7 @@ def fetch_from_bbc():
     response = requests.get(url)
     soup = BeautifulSoup(response.content, features="xml")
     items = soup.findAll("item")
-     articles = []
+    articles = []
     for item in items:
         title = item.title.text
         link = item.link.text
