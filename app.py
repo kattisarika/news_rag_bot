@@ -96,7 +96,6 @@ def fetch_weather_rss():
         for item in items
     ]
 
-print(fetch_dfw_weather_wfaa())
 
 
 
