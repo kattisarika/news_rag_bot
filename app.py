@@ -79,8 +79,8 @@ def fetch_from_bbc():
     return [item.title.text + ". " + item.description.text for item in items]
 
 def fetch_weather_rss():
-   import requests
-   from bs4 import BeautifulSoup
+    import requests
+    from bs4 import BeautifulSoup
 
     url = "https://www.wfaa.com/feeds/syndication/rss/weather"
     headers = {"User-Agent": "Mozilla/5.0"}
