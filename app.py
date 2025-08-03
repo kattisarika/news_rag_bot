@@ -15,6 +15,8 @@ from langchain_community.vectorstores import FAISS
 from langchain_openai import OpenAIEmbeddings
 import streamlit as st
 from langchain_openai import OpenAIEmbeddings
+from gql import gql, Client
+from gql.transport.requests import RequestsHTTPTransport
 
 from dotenv import load_dotenv
 import os
@@ -118,6 +120,33 @@ def fetch_sample_weather():
     items = soup.find_all("item")
     return [f"{item.title.text}. {item.description.text}" for item in items]
 
+
+def fetch_from_graphql():
+    transport = RequestsHTTPTransport(
+        url="https://countries.trevorblades.com/",
+        verify=True,
+        retries=3,
+    )
+    client = Client(transport=transport, fetch_schema_from_transport=True)
+
+    query = gql("""
+    {
+      countries {
+        name
+        capital
+        emoji
+      }
+    }
+    """)
+
+    result = client.execute(query)
+    articles = []
+    for country in result["countries"][:10]:  # Limit to 10 results
+        name = country["name"]
+        capital = country.get("capital", "N/A")
+        emoji = country.get("emoji", "")
+        articles.append(f"{emoji} **{name}** – Capital: {capital}")
+    return articles
 
 # Scrape and process
 news_text = scrape_news()
