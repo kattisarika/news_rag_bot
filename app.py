@@ -86,30 +86,6 @@ def fetch_sample_weather():
     return [f"{item.title.text}. {item.description.text}" for item in items]
 
 
-def fetch_weather_rss():
-    import requests
-    from bs4 import BeautifulSoup
-
-    url = "https://w1.weather.gov/xml/current_obs/KDAL.rss"
-    headers = {"User-Agent": "Mozilla/5.0"}
-    resp = requests.get(url, headers=headers)
-    resp.raise_for_status()
-
-    soup = BeautifulSoup(resp.content, features="xml")
-    items = soup.find_all("item")
-    if not items:
-        return ["No weather items found in feed"]
-
-    news = []
-    for item in items:
-        title = item.title.text if item.title else "No title"
-        description = item.description.text if item.description else ""
-        news.append(f"{title}. {description}")
-    return news
-print(fetch_weather_rss())
-
-
-
 # Scrape and process
 news_text = scrape_news()
 text_splitter = CharacterTextSplitter(chunk_size=500, chunk_overlap=50)
