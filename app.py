@@ -80,7 +80,7 @@ def fetch_from_bbc():
 
 def fetch_weather_rss():
    import requests
-    from bs4 import BeautifulSoup
+   from bs4 import BeautifulSoup
 
     url = "https://www.wfaa.com/feeds/syndication/rss/weather"
     headers = {"User-Agent": "Mozilla/5.0"}
