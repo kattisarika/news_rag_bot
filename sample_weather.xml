@@ -1,9 +1,14 @@
-<rss>
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
   <channel>
     <title>Sample Weather Feed</title>
     <item>
-      <title>Dallas Weather</title>
-      <description>Sunny, 85°F</description>
+      <title>Dallas Weather Update</title>
+      <description>Sunny, 85°F with light breeze.</description>
+    </item>
+    <item>
+      <title>Tomorrow's Forecast</title>
+      <description>Partly cloudy, high of 90°F.</description>
     </item>
   </channel>
 </rss>
