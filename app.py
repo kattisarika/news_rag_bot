@@ -33,7 +33,9 @@ def get_news_articles(source="TOI"):
     elif source == "BBC":
         return fetch_from_bbc()
     elif source == "NY TIMES":
-        return fetch_weather_rss()    
+        return fetch_from_nytimes()
+    elif source == "WEATHER":
+        return fetch_weather_rss()
     else:
         return []
 
