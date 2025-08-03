@@ -10,3 +10,4 @@ faiss-cpu
 langchain-openai
 streamlit
 lxml
+gql[requests]
