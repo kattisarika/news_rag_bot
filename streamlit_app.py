@@ -2,6 +2,7 @@ import streamlit as st
 from app import qa_chain
 from app import get_news_articles
 
+st.title("Process Automation")
 st.title("NEWS RAG BOT")
 
 option_map = {
