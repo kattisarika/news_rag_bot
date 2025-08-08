@@ -3,8 +3,8 @@ from app import qa_chain
 from app import get_news_articles
 
 st.title("Process Automation")
-st.text("INTEGRATING USER STORIES TO CURSOR OR LOVABLE =====>  GENERATING CODE THROUGH THESE PLATFORMS ===========> DEPLOYING THE APP ON AWS OR HEROKU ")
-st.text("INTEGRATING JIRA BUG FILING TO CURSOR OR LOVABLE =====>  GENERATING CODE THROUGH THESE PLATFORMS ===========> DEPLOYING THE APP ON AWS OR HEROKU ")
+st.text("INTEGRATING USER STORIES TO CURSOR OR LOVABLE =====>  GENERATING CODE THROUGH THESE PLATFORMS ===========> DEPLOYING THE APP ON AWS OR HEROKU =============> Summarizing whats done, whts left and what are the road blocks ")
+st.text("INTEGRATING JIRA BUG FILING TO CURSOR OR LOVABLE =====>  GENERATING CODE THROUGH THESE PLATFORMS ===========> DEPLOYING THE APP ON AWS OR HEROKU =============> Summarizing bugs resolved, whts left and what are the road blocks ")
 
 
 st.title("NEWS PORTAL")
