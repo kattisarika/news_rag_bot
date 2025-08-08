@@ -3,7 +3,12 @@ from app import qa_chain
 from app import get_news_articles
 
 st.title("Process Automation")
-st.title("NEWS RAG BOT")
+st.title("INTEGRATING USER STORIES TO CURSOR OR LOVABLE =====>  GENERATING CODE THROUGH THESE PLATFORMS ===========> DEPLOYING THE APP ON AWS OR HEROKU ")
+st.title("INTEGRATING JIRA BUG FILING TO CURSOR OR LOVABLE =====>  GENERATING CODE THROUGH THESE PLATFORMS ===========> DEPLOYING THE APP ON AWS OR HEROKU ")
+
+
+st.title("NEWS PORTAL")
+
 
 option_map = {
     "Times of India": "TOI",
