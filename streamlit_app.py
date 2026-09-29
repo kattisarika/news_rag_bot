@@ -1,45 +1,88 @@
 import streamlit as st
-from app import get_news_articles
+
+from agent import news_agent
 
 
-st.title("NEWS PORTAL")
+# =========================================================
+# PAGE
+# =========================================================
 
+st.title("Agentic News Assistant")
 
-option_map = {
-    "Times of India": "TOI",
-    "NY Times": "NY TIMES",
-    "BBC": "BBC",
-    "Weather": "WEATHER",
-    "Countries (GraphQL)": "GRAPHQL"
-}
-
-
-news_source_label = st.radio(
-    "Choose your news source:",
-    list(option_map.keys())
+st.write(
+    "Ask me about BBC, Times of India, "
+    "New York Times, weather, or countries."
 )
 
 
-source_key = option_map[news_source_label]
+# =========================================================
+# USER QUESTION
+# =========================================================
 
-
-articles = get_news_articles(
-    source=source_key
+query = st.text_input(
+    "What would you like to know?"
 )
 
 
-if articles:
+# =========================================================
+# ASK AGENT
+# =========================================================
 
-    for i, article in enumerate(
-        articles[:10]
-    ):
+if st.button("Ask Agent"):
 
-        st.markdown(
-            f"**{i+1}.** {article}"
+    if query:
+
+        initial_state = {
+
+            "query": query,
+
+            "route": "",
+
+            "result": [],
+
+            "error": "",
+
+            "retry_count": 0
+        }
+
+
+        # Execute LangGraph
+
+        response = news_agent.invoke(
+            initial_state
         )
 
-else:
 
-    st.write(
-        "No articles found for the selected source."
-    )
+        # Show selected route
+
+        st.write(
+            f"**Agent selected:** "
+            f"{response['route']}"
+        )
+
+
+        # Display results
+
+        results = response.get(
+            "result",
+            []
+        )
+
+
+        if results:
+
+            for item in results:
+
+                st.markdown(item)
+
+        else:
+
+            st.warning(
+                "No results returned."
+            )
+
+    else:
+
+        st.warning(
+            "Please enter a question."
+        )
