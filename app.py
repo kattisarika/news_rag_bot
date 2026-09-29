@@ -4,30 +4,9 @@ from gql import gql, Client
 from gql.transport.requests import RequestsHTTPTransport
 
 
-def get_news_articles(source="TOI"):
-
-    if source == "TOI":
-        return fetch_from_toi()
-
-    elif source == "BBC":
-        return fetch_from_bbc()
-
-    elif source == "NY TIMES":
-        return fetch_from_nytimes()
-
-    elif source == "WEATHER":
-        return fetch_sample_weather()
-
-    elif source == "GRAPHQL":
-        return fetch_from_graphql()
-
-    else:
-        return []
-
-
-# -------------------------
-# TIMES OF INDIA
-# -------------------------
+# =========================================================
+# TIMES OF INDIA TOOL
+# =========================================================
 
 def fetch_from_toi():
 
@@ -37,8 +16,7 @@ def fetch_from_toi():
         response = requests.get(url, timeout=10)
         response.raise_for_status()
 
-        soup = BeautifulSoup(response.content, features="xml")
-
+        soup = BeautifulSoup(response.content, "xml")
         items = soup.find_all("item")
 
         articles = []
@@ -58,9 +36,9 @@ def fetch_from_toi():
         return [f"Error fetching Times of India: {e}"]
 
 
-# -------------------------
-# BBC
-# -------------------------
+# =========================================================
+# BBC TOOL
+# =========================================================
 
 def fetch_from_bbc():
 
@@ -70,8 +48,7 @@ def fetch_from_bbc():
         response = requests.get(url, timeout=10)
         response.raise_for_status()
 
-        soup = BeautifulSoup(response.content, features="xml")
-
+        soup = BeautifulSoup(response.content, "xml")
         items = soup.find_all("item")
 
         articles = []
@@ -91,9 +68,9 @@ def fetch_from_bbc():
         return [f"Error fetching BBC: {e}"]
 
 
-# -------------------------
-# NEW YORK TIMES
-# -------------------------
+# =========================================================
+# NEW YORK TIMES TOOL
+# =========================================================
 
 def fetch_from_nytimes():
 
@@ -103,8 +80,7 @@ def fetch_from_nytimes():
         response = requests.get(url, timeout=10)
         response.raise_for_status()
 
-        soup = BeautifulSoup(response.content, features="xml")
-
+        soup = BeautifulSoup(response.content, "xml")
         items = soup.find_all("item")
 
         articles = []
@@ -124,9 +100,9 @@ def fetch_from_nytimes():
         return [f"Error fetching NY Times: {e}"]
 
 
-# -------------------------
-# WEATHER
-# -------------------------
+# =========================================================
+# WEATHER TOOL
+# =========================================================
 
 def fetch_sample_weather():
 
@@ -136,15 +112,14 @@ def fetch_sample_weather():
             "sample_weather.xml",
             "r",
             encoding="utf-8"
-        ) as f:
+        ) as file:
 
-            content = f.read()
+            content = file.read()
 
         soup = BeautifulSoup(content, "xml")
-
         items = soup.find_all("item")
 
-        results = []
+        weather_results = []
 
         for item in items[:10]:
 
@@ -160,11 +135,11 @@ def fetch_sample_weather():
                 else ""
             )
 
-            results.append(
-                f"{title}. {description}"
+            weather_results.append(
+                f"{title}: {description}"
             )
 
-        return results
+        return weather_results
 
     except Exception as e:
 
@@ -173,9 +148,9 @@ def fetch_sample_weather():
         ]
 
 
-# -------------------------
-# GRAPHQL
-# -------------------------
+# =========================================================
+# GRAPHQL COUNTRY TOOL
+# =========================================================
 
 def fetch_from_graphql():
 
@@ -206,25 +181,27 @@ def fetch_from_graphql():
 
         result = client.execute(query)
 
-        articles = []
+        countries = []
 
         for country in result["countries"][:10]:
 
             name = country["name"]
 
-            capital = country.get(
-                "capital"
-            ) or "N/A"
-
-            emoji = country.get(
-                "emoji"
-            ) or ""
-
-            articles.append(
-                f"{emoji} **{name}** – Capital: {capital}"
+            capital = (
+                country.get("capital")
+                or "N/A"
             )
 
-        return articles
+            emoji = (
+                country.get("emoji")
+                or ""
+            )
+
+            countries.append(
+                f"{emoji} **{name}** - Capital: {capital}"
+            )
+
+        return countries
 
     except Exception as e:
 
