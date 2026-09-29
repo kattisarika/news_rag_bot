@@ -1,177 +1,233 @@
-import os
 import requests
-import sys
-import pysqlite3
-sys.modules["sqlite3"] = pysqlite3
-
 from bs4 import BeautifulSoup
-from langchain.text_splitter import CharacterTextSplitter
-from langchain_community.vectorstores import Chroma
-from langchain_community.embeddings import OpenAIEmbeddings
-from langchain.chains import RetrievalQA
-from langchain.chat_models import ChatOpenAI
-from chromadb.config import Settings
-from langchain_community.vectorstores import FAISS
-from langchain_openai import OpenAIEmbeddings
-import streamlit as st
-from langchain_openai import OpenAIEmbeddings
 from gql import gql, Client
 from gql.transport.requests import RequestsHTTPTransport
 
-from dotenv import load_dotenv
-import os
-
-load_dotenv()
-
-openai_api_key = os.getenv("OPENAI_API_KEY")
-print("Loaded OpenAI key:", bool(openai_api_key))  # TEMP: for debugging
-
-from langchain_openai import OpenAIEmbeddings
-embeddings = OpenAIEmbeddings(openai_api_key=st.secrets["OPENAI_API_KEY"])
 
 def get_news_articles(source="TOI"):
+
     if source == "TOI":
         return fetch_from_toi()
+
     elif source == "BBC":
         return fetch_from_bbc()
+
     elif source == "NY TIMES":
         return fetch_from_nytimes()
+
     elif source == "WEATHER":
         return fetch_sample_weather()
+
     elif source == "GRAPHQL":
-        return fetch_from_graphql()    
+        return fetch_from_graphql()
+
     else:
         return []
 
-def scrape_news():
-    url = "https://timesofindia.indiatimes.com"
-    r = requests.get(url)
-    soup = BeautifulSoup(r.text, "html.parser")
-    articles = soup.find_all("a", href=True)
-    news = []
-    for a in articles:
-        text = a.get_text(strip=True)
-        href = a['href']
-        if text and '/articleshow/' in href:
-            full_link = url + href if not href.startswith("http") else href
-            news.append(f"{text} ({full_link})")
-        if len(news) >= 10:
-            break
-    return "\n".join(news)
 
-
+# -------------------------
+# TIMES OF INDIA
+# -------------------------
 
 def fetch_from_toi():
-    import requests
-    from bs4 import BeautifulSoup
 
     url = "https://timesofindia.indiatimes.com/rssfeedstopstories.cms"
-    response = requests.get(url)
-    soup = BeautifulSoup(response.content, features="xml")
-    items = soup.findAll("item")
-    articles = []
-    for item in items:
-        title = item.title.text
-        link = item.link.text
-        articles.append(f"[{title}]({link})")
-    
-    return articles  
+
+    try:
+        response = requests.get(url, timeout=10)
+        response.raise_for_status()
+
+        soup = BeautifulSoup(response.content, features="xml")
+
+        items = soup.find_all("item")
+
+        articles = []
+
+        for item in items[:10]:
+
+            title = item.title.text if item.title else "No title"
+            link = item.link.text if item.link else "#"
+
+            articles.append(
+                f"[{title}]({link})"
+            )
+
+        return articles
+
+    except Exception as e:
+        return [f"Error fetching Times of India: {e}"]
 
 
-   
+# -------------------------
+# BBC
+# -------------------------
+
 def fetch_from_bbc():
-    import requests
-    from bs4 import BeautifulSoup
 
-    url = "http://feeds.bbci.co.uk/news/rss.xml"
-    response = requests.get(url)
-    soup = BeautifulSoup(response.content, features="xml")
-    items = soup.findAll("item")
-    articles = []
-    for item in items:
-        title = item.title.text
-        link = item.link.text
-        articles.append(f"[{title}]({link})")
-    
-    return articles  
+    url = "https://feeds.bbci.co.uk/news/rss.xml"
 
+    try:
+        response = requests.get(url, timeout=10)
+        response.raise_for_status()
+
+        soup = BeautifulSoup(response.content, features="xml")
+
+        items = soup.find_all("item")
+
+        articles = []
+
+        for item in items[:10]:
+
+            title = item.title.text if item.title else "No title"
+            link = item.link.text if item.link else "#"
+
+            articles.append(
+                f"[{title}]({link})"
+            )
+
+        return articles
+
+    except Exception as e:
+        return [f"Error fetching BBC: {e}"]
+
+
+# -------------------------
+# NEW YORK TIMES
+# -------------------------
 
 def fetch_from_nytimes():
-    import requests
-    from bs4 import BeautifulSoup
 
     url = "https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml"
-    response = requests.get(url)
-    soup = BeautifulSoup(response.content, features="xml")
-    items = soup.findAll("item")
-    
-    articles = []
-    for item in items:
-        title = item.title.text
-        link = item.link.text
-        articles.append(f"[{title}]({link})")
-    
-    return articles  
+
+    try:
+        response = requests.get(url, timeout=10)
+        response.raise_for_status()
+
+        soup = BeautifulSoup(response.content, features="xml")
+
+        items = soup.find_all("item")
+
+        articles = []
+
+        for item in items[:10]:
+
+            title = item.title.text if item.title else "No title"
+            link = item.link.text if item.link else "#"
+
+            articles.append(
+                f"[{title}]({link})"
+            )
+
+        return articles
+
+    except Exception as e:
+        return [f"Error fetching NY Times: {e}"]
 
 
+# -------------------------
+# WEATHER
+# -------------------------
 
 def fetch_sample_weather():
-    with open("sample_weather.xml", "r") as f:
-        content = f.read()
-    soup = BeautifulSoup(content, "xml")
-    items = soup.find_all("item")
-    return [f"{item.title.text}. {item.description.text}" for item in items]
 
+    try:
+
+        with open(
+            "sample_weather.xml",
+            "r",
+            encoding="utf-8"
+        ) as f:
+
+            content = f.read()
+
+        soup = BeautifulSoup(content, "xml")
+
+        items = soup.find_all("item")
+
+        results = []
+
+        for item in items[:10]:
+
+            title = (
+                item.title.text
+                if item.title
+                else "Weather"
+            )
+
+            description = (
+                item.description.text
+                if item.description
+                else ""
+            )
+
+            results.append(
+                f"{title}. {description}"
+            )
+
+        return results
+
+    except Exception as e:
+
+        return [
+            f"Error reading weather data: {e}"
+        ]
+
+
+# -------------------------
+# GRAPHQL
+# -------------------------
 
 def fetch_from_graphql():
-    transport = RequestsHTTPTransport(
-        url="https://countries.trevorblades.com/",
-        verify=True,
-        retries=3,
-    )
-    client = Client(transport=transport, fetch_schema_from_transport=True)
 
-    query = gql("""
-    {
-      countries {
-        name
-        capital
-        emoji
-      }
-    }
-    """)
+    try:
 
-    result = client.execute(query)
-    articles = []
-    for country in result["countries"][:10]:  # Limit to 10 results
-        name = country["name"]
-        capital = country.get("capital", "N/A")
-        emoji = country.get("emoji", "")
-        articles.append(f"{emoji} **{name}** – Capital: {capital}")
-    return articles
+        transport = RequestsHTTPTransport(
+            url="https://countries.trevorblades.com/",
+            verify=True,
+            retries=3
+        )
 
-# Scrape and process
-news_text = scrape_news()
-text_splitter = CharacterTextSplitter(chunk_size=500, chunk_overlap=50)
-texts = text_splitter.split_text(news_text)
+        client = Client(
+            transport=transport,
+            fetch_schema_from_transport=True
+        )
 
+        query = gql(
+            """
+            {
+                countries {
+                    name
+                    capital
+                    emoji
+                }
+            }
+            """
+        )
 
-# After loading your texts:
-embeddings = OpenAIEmbeddings()
-vectordb = FAISS.from_texts(texts, embedding=embeddings)
+        result = client.execute(query)
 
+        articles = []
 
-# Define LLM
-llm = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0)
+        for country in result["countries"][:10]:
 
-# Expose QA chain for external use
-qa_chain = RetrievalQA.from_chain_type(
-    llm=llm,
-    chain_type="stuff",
-    retriever=vectordb.as_retriever()
-)
+            name = country["name"]
 
-if __name__ == "__main__":
-    print("Scraped news and created vector store.")
-    print("You can now run queries via the Streamlit app.")
+            capital = country.get(
+                "capital"
+            ) or "N/A"
 
+            emoji = country.get(
+                "emoji"
+            ) or ""
+
+            articles.append(
+                f"{emoji} **{name}** – Capital: {capital}"
+            )
+
+        return articles
+
+    except Exception as e:
+
+        return [
+            f"Error fetching GraphQL data: {e}"
+        ]
